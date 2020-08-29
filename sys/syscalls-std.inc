@@ -96,6 +96,5 @@ _sys_exit:
     pop rax
 ret
 
-%endif SYSCALLS_STD_INC
-
-%define BLABLA 0
+%endif
+;SYSCALLS_STD_INC

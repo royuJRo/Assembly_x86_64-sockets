@@ -47,4 +47,5 @@ _printf:
 
     ret
 
-%endif STD_IO_INC
+%endif
+;STD_IO_INC
