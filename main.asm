@@ -1,6 +1,6 @@
 
 section .data
-    string db "Hello world !", 10, 0
+    string db "The socket file descriptor is : ", 0
 
 section .bss
     socketfd resw 1
@@ -14,6 +14,8 @@ section .data
     _start:
         printf string
         sys_socket AF_INET, SOCK_STREAM, 0, socketfd
+        printfn [socketfd]
+        new_line
 
     exit:
         sys_exit 0
