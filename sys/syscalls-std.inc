@@ -9,6 +9,12 @@
 %define EXIT_SUCCESS_CODE 0
 %define EXIT_ERROR_CODE 1
 
+;====================================
+;       Write System call Macro
+;   sys_write file descriptor, offset buffer(the buffer the is writing to the file), bytes num(the num of bytes we are writing)
+;
+;   The macro is invoking Linux's write system call and writes into the file descriptor's file
+;====================================
 %macro sys_write 3
     push rdi
     push rsi
@@ -25,6 +31,12 @@
     pop rdi
 %endmacro
 
+;====================================
+;       Read System call Macro
+;   sys_read file descriptor, offset buffer(the buffer it's reading), bytes num(the num of bytes we are reading)
+;
+;   The macro is invoking Linux's read system call and reads from the file descriptor's file
+;====================================
 %macro sys_read 3
     push rdi
     push rsi
@@ -41,6 +53,12 @@
     pop rdi
 %endmacro
 
+;====================================
+;       Exit System call Macro
+;   sys_exit exit_code
+;
+;   The macro is invoking Linux's exit system call and exit the process with the arg exit code.
+;====================================
 %macro sys_exit 1
     push rdi
 

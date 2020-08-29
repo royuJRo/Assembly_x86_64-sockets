@@ -7,13 +7,20 @@
 %define STDIN 0
 %define STDERR 2
 
+
+;====================================
+;       printf function Macro
+;   printf string offset(a offset of string to print)
+;
+;   The macro is invoking printf classic function using Linux's write system call.(Writing to the stdout fd)
+;====================================
 %macro printf 1
-push rsi
+    push rsi
 
-mov rsi, %1
-call _printf
+    mov rsi, %1
+    call _printf
 
-pop rsi
+    pop rsi
 %endmacro
 
 
@@ -46,6 +53,12 @@ _printf:
     pop rdi
 
     ret
+
+
+
+
+
+
 
 %endif
 ;STD_IO_INC
