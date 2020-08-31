@@ -44,7 +44,7 @@
 ;   as the fourth parameter.
 ;
 ;====================================
-%macro sys_socket 4
+%macro sys_socket 3
     push rdi
     push rsi
     push rdx
@@ -53,9 +53,6 @@
     mov rsi, %2 ; socket type
     mov rdx, %3 ; socket protocol
     call _sys_socket
-    pop rdi ; getting the socket's file descriptor
-    mov rsi, %4 ; getting the varrible which is hosting the file descriptor address.
-    mov qword [rsi], rdi ; hosting the file descriptor in memory.
 
     pop rdx
     pop rsi
@@ -86,21 +83,11 @@
 ;   rsi <---- socket type(integer)
 ;   rdx <---- socket protocol(o in most cases)
 ;
-;   The function returns the socket's file descriptor using the stack
+;   The function returns the socket's file descriptor using the rax register.
 ;====================================
 _sys_socket:
-    push rax
-
     mov rax, SYS_SOCKET
     syscall
-
-    mov rdi, rax ; moving the file descriptor from the returned value of socket system call in rax.
-    
-    pop rax
-    pop rsi ; getting the return address that in the stack in preperation for rerurning a value(socket
-    ; file descriptor via stack)
-    push rdi ; pushing the file descriptor for returning it later.
-    push rsi ; pushing back the return address to stack.
 ret
 
 ;====================================
