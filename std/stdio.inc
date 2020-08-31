@@ -81,7 +81,7 @@ _printf:
 
 ;====================================
 ;         printfn function
-;   rsi <---- destenation to 64 bit integer
+;   rsi <---- value of a 64 bit integer
 ;
 ;   The function prints the integer
 ;====================================
