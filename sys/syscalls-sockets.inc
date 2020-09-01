@@ -16,6 +16,15 @@
 ; SOCK_DGRAM is for UDP protocol.
 %define SOCK_DGRAM 2
 
+; ----- Defining some constants for socket shutdown function. -----
+; Further receptions will be disallowed after shutdown.
+%define SHUT_RD 0
+; Further transmissions will be disallowed after shutdown.
+%define SHUT_WR 1
+; Further receptions and transmissions will be disallowed after shutdown.
+%define SHUT_RDWR 2
+
+
 ;========================================
 ;       Allocate struct sockaddr_in
 ;              in the stack
@@ -141,6 +150,46 @@ _allocate_sockaddr_in:
     push r10 ; pusinng the subroutine return address.
 ret
 
+;========================================
+;       Free struct sockaddr_in allocation
+;             from the stack
+;   rax - the address of the struct's beginning in the stack.
+;
+;   The function deallocate the local struct from stack memory.
+;========================================
+free_sockaddr_in:
+    cmp rax, rsp ; if nothing have allocated after the struct.
+    je free_sockaddr_in_end ; go to the end and pop the struct out of stack.
+
+    ; saving those rgisters values by using struct.
+    push rcx
+    push rbx
+    push rsi
+    push rdi
+
+    ; getting the addresses of the end of the struct and the beginning of new stack allocations.
+    mov rbx, rax ; moving the struct pointer's address.
+    lea rsi, [rbx +15] ; end of struct address
+    lea rdi, [rbx -1] ; address of new stack's allocations.
+
+    ; calculating how many bytes we sould copy.
+    mov rcx, rsp
+    sub rcx, rax
+
+    std ; turn direction flag on for reverse copying.
+    rep movsb [rsi] , [rdi] ; start reverse copying. struct "destroyment".
+    cld ; turn direction flag off for reverse copying.
+
+    pop rdi
+    pop rsi
+    pop rbx
+    pop rcx
+
+    free_sockaddr_in_end:
+        ; free the size of bytes the struct took from our memory.
+        pop rax
+        pop rax
+ret
 
 %endif
 ;SYSCALLS_SOCKETS_INC
